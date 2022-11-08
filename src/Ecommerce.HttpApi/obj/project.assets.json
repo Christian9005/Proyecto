@@ -88,6 +88,29 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "Ecommerce.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Ecommerce.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Ecommerce.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Ecommerce.Application.dll": {}
+        }
+      },
+      "Ecommerce.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Ecommerce.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Ecommerce.Domain.dll": {}
+        }
       }
     }
   },
@@ -216,10 +239,21 @@
         "swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
+    },
+    "Ecommerce.Application/1.0.0": {
+      "type": "project",
+      "path": "../Ecommerce.Application/Ecommerce.Application.csproj",
+      "msbuildProject": "../Ecommerce.Application/Ecommerce.Application.csproj"
+    },
+    "Ecommerce.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Ecommerce.Domain/Ecommerce.Domain.csproj",
+      "msbuildProject": "../Ecommerce.Domain/Ecommerce.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "Ecommerce.Application >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.2.3"
     ]
   },
@@ -255,7 +289,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Over\\Desktop\\proga\\c#\\Download\\ProyectoEcommerce\\src\\Ecommerce.Application\\Ecommerce.Application.csproj": {
+              "projectPath": "C:\\Users\\Over\\Desktop\\proga\\c#\\Download\\ProyectoEcommerce\\src\\Ecommerce.Application\\Ecommerce.Application.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
