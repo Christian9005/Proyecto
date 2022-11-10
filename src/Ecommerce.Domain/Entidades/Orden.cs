@@ -9,7 +9,7 @@ namespace Ecommerce.Domain;
 public class Orden
 {
     [Required]
-    public int Id {get; set;}
+    public Guid Id {get; set;}
 
     [Required]
     public int ClienteId {get; set;}

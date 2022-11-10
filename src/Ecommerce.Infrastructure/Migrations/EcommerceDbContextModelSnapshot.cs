@@ -58,9 +58,9 @@ namespace Ecommerce.Infrastructure.Migrations
 
             modelBuilder.Entity("Ecommerce.Domain.Marca", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasMaxLength(4)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -74,9 +74,9 @@ namespace Ecommerce.Infrastructure.Migrations
 
             modelBuilder.Entity("Ecommerce.Domain.Orden", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ClienteId")
                         .HasColumnType("INTEGER");
@@ -105,9 +105,9 @@ namespace Ecommerce.Infrastructure.Migrations
 
             modelBuilder.Entity("Ecommerce.Domain.OrdenItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Cantidad")
                         .HasColumnType("INTEGER");
@@ -117,6 +117,9 @@ namespace Ecommerce.Infrastructure.Migrations
 
                     b.Property<int>("OrdenId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("OrdenId1")
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("Precio")
                         .HasColumnType("REAL");
@@ -129,7 +132,7 @@ namespace Ecommerce.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrdenId");
+                    b.HasIndex("OrdenId1");
 
                     b.HasIndex("ProductId");
 
@@ -148,6 +151,9 @@ namespace Ecommerce.Infrastructure.Migrations
                     b.Property<int>("MarcaId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("MarcaId1")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(80)
@@ -164,7 +170,7 @@ namespace Ecommerce.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MarcaId");
+                    b.HasIndex("MarcaId1");
 
                     b.HasIndex("TipoProductoId");
 
@@ -202,9 +208,7 @@ namespace Ecommerce.Infrastructure.Migrations
                 {
                     b.HasOne("Ecommerce.Domain.Orden", "Orden")
                         .WithMany("Items")
-                        .HasForeignKey("OrdenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrdenId1");
 
                     b.HasOne("Ecommerce.Domain.Producto", "Product")
                         .WithMany()
@@ -219,9 +223,7 @@ namespace Ecommerce.Infrastructure.Migrations
                 {
                     b.HasOne("Ecommerce.Domain.Marca", "Marca")
                         .WithMany()
-                        .HasForeignKey("MarcaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MarcaId1");
 
                     b.HasOne("Ecommerce.Domain.TipoProducto", "TipoProducto")
                         .WithMany()

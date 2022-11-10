@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using Ecommerce.Domain;
 
-namespace Ecommerce.Domain;
+namespace Ecommerce.Application.Dtos;
 
-public class Marca
+public class MarcaDto
 {
     [Required]
     [StringLength(Constantes.MAX_LEN_ID)]
@@ -16,4 +14,3 @@ public class Marca
     [StringLength(Constantes.MAX_LEN)]
     public string? Nombre {get; set;}
 }
-

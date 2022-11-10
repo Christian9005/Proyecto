@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ecommerce.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class MigracionInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,8 +33,7 @@ namespace Ecommerce.Infrastructure.Migrations
                 name: "Marcas",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<string>(type: "TEXT", maxLength: 4, nullable: false),
                     Nombre = table.Column<string>(type: "TEXT", maxLength: 80, nullable: false)
                 },
                 constraints: table =>
@@ -59,8 +58,7 @@ namespace Ecommerce.Infrastructure.Migrations
                 name: "Ordenes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
                     FechaAnulacion = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -90,17 +88,17 @@ namespace Ecommerce.Infrastructure.Migrations
                     Observaciones = table.Column<string>(type: "TEXT", nullable: true),
                     Caducidad = table.Column<DateTime>(type: "TEXT", nullable: false),
                     MarcaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MarcaId1 = table.Column<string>(type: "TEXT", nullable: true),
                     TipoProductoId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Productos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Productos_Marcas_MarcaId",
-                        column: x => x.MarcaId,
+                        name: "FK_Productos_Marcas_MarcaId1",
+                        column: x => x.MarcaId1,
                         principalTable: "Marcas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Productos_TipoProductos_TipoProductoId",
                         column: x => x.TipoProductoId,
@@ -113,11 +111,11 @@ namespace Ecommerce.Infrastructure.Migrations
                 name: "OrdenItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProducId = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductId = table.Column<int>(type: "INTEGER", nullable: true),
                     OrdenId = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrdenId1 = table.Column<Guid>(type: "TEXT", nullable: true),
                     Cantidad = table.Column<long>(type: "INTEGER", nullable: false),
                     Precio = table.Column<double>(type: "REAL", nullable: false),
                     Observaciones = table.Column<string>(type: "TEXT", nullable: true)
@@ -126,11 +124,10 @@ namespace Ecommerce.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_OrdenItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrdenItem_Ordenes_OrdenId",
-                        column: x => x.OrdenId,
+                        name: "FK_OrdenItem_Ordenes_OrdenId1",
+                        column: x => x.OrdenId1,
                         principalTable: "Ordenes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrdenItem_Productos_ProductId",
                         column: x => x.ProductId,
@@ -144,9 +141,9 @@ namespace Ecommerce.Infrastructure.Migrations
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrdenItem_OrdenId",
+                name: "IX_OrdenItem_OrdenId1",
                 table: "OrdenItem",
-                column: "OrdenId");
+                column: "OrdenId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdenItem_ProductId",
@@ -154,9 +151,9 @@ namespace Ecommerce.Infrastructure.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Productos_MarcaId",
+                name: "IX_Productos_MarcaId1",
                 table: "Productos",
-                column: "MarcaId");
+                column: "MarcaId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Productos_TipoProductoId",
