@@ -16,9 +16,9 @@ public class ClienteController : ControllerBase
     }
 
     [HttpGet]
-    public ICollection<ClienteDto> GetAll(string buscar, int limit = 10, int offset = 0)
+    public ICollection<ClienteDto> GetAll(int limit = 10, int offset = 0)
     {
-        return clienteAppService.GetAll(buscar, limit, offset);
+        return clienteAppService.GetAll(limit, offset);
     }
 
     [HttpPost]
