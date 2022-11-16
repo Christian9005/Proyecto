@@ -22,9 +22,18 @@ public class CartAppService : ICartAppService
         this.logger = logger;
     }
 
-    public Task<bool> CancelAsync(Guid cartId)
+    public async Task<bool> DeleteAsync(Guid cartId)
     {
-        throw new NotImplementedException();
+        var cart = await cartRepository.GetByIdAsync(cartId);
+        if(cart == null)
+        {
+            throw new ArgumentException($"El carrito con el id: {cartId}, no existe!!");
+        }
+
+        cartRepository.Delete(cart);
+        await cartRepository.UnitOfWork.SaveChangesAsync();
+
+        return true;
     }
 
     public async Task<CartDto> CreateAsync(CartCreateDto cartDto)
@@ -64,7 +73,35 @@ public class CartAppService : ICartAppService
 
     public ListaPaginada<CartDto> GetAll(int limit = 10, int offset = 0)
     {
-        throw new NotImplementedException();
+        var consulta = cartRepository.GetAllIncluding(ca => ca.Cliente, ca =>ca.Items);
+        var total = consulta.Count();
+
+        var consultaListaCartDto = consulta.Skip(offset).Take(limit)
+                                                .Select(
+                                                    ca => new CartDto()
+                                                    {
+                                                        Id = ca.Id,
+                                                        ClienteId = ca.ClienteId,
+                                                        Cliente = ca.Cliente.NombreCompleto,
+                                                        SubTotal = ca.SubTotal,
+                                                        Observaciones = ca.Observaciones,
+                                                        Items = ca.Items.Select(item => new CartItemsDto()
+                                                                                {
+                                                                                    Id = item.Id,
+                                                                                    ProductId = item.ProductId,
+                                                                                    Product = item.Product.Nombre,
+                                                                                    CartId = item.CartId,
+                                                                                    Cantidad = item.Cantidad,
+                                                                                    Precio = item.Precio
+                                                                                }).ToList()
+                                                    }
+                                                );
+        
+        var resultado = new ListaPaginada<CartDto>();
+        resultado.Total = total;
+        resultado.Lista = consultaListaCartDto.ToList();
+        
+        return resultado;
     }
 
     public Task<CartDto> GetByIdAsync(Guid cartId)
@@ -95,8 +132,19 @@ public class CartAppService : ICartAppService
         return Task.FromResult(consultaCartDto.SingleOrDefault());
     }
 
-    public Task UpdateAsync(Guid cartId, CartUpdateDto cartDto)
+    public async Task UpdateAsync(Guid cartId, CartUpdateDto cartDto)
     {
-        throw new NotImplementedException();
+        var cart = await cartRepository.GetByIdAsync(cartId);
+        if (cart == null)
+        {
+            throw new ArgumentException($"El Carrito con el id: {cartId}, no existe!!");
+        }
+
+        cart.Observaciones = cartDto.Observaciones;
+
+        await cartRepository.UpdateAsync(cart);
+        await cartRepository.UnitOfWork.SaveChangesAsync();
+
+        return;
     }
 }

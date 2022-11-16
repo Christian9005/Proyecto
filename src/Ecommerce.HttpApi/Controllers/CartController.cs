@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Ecommerce.Application;
 using Ecommerce.Application.Dtos;
 using Ecommerce.Application.Interfaces;
@@ -45,8 +42,8 @@ public class CartController: ControllerBase
     }
 
     [HttpDelete]
-    public async Task<bool> CancelAsync(Guid cartId)
+    public async Task<bool> DeleteAsync(Guid cartId)
     {
-        return await cartAppService.CancelAsync(cartId);
+        return await cartAppService.DeleteAsync(cartId);
     }
 }
