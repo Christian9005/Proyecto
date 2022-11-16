@@ -14,7 +14,7 @@ public class CartItems
 
     [Required]
     public int ProductId {get; set;}
-    public virtual Producto Producto{get; set;}
+    public virtual Producto Product{get; set;}
 
     [Required]
     public Guid CartId {get; set;}

@@ -18,6 +18,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddTransient<IProductoAppService, ProductoAppService>();
         services.AddTransient<IOrdenAppService, OrdenAppService>();
         services.AddTransient<IClienteAppService, ClienteAppService>();
+        services.AddTransient<ICartAppService, CartAppService>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

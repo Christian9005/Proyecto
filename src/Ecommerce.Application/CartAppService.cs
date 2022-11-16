@@ -2,6 +2,7 @@
 
 using Ecommerce.Application.Dtos;
 using Ecommerce.Application.Interfaces;
+using Ecommerce.Domain.Entidades;
 using Ecommerce.Domain.Repository;
 using Microsoft.Extensions.Logging;
 
@@ -10,14 +11,14 @@ namespace Ecommerce.Application;
 public class CartAppService : ICartAppService
 {
     private readonly ICartRepository cartRepository;
-    private readonly ICartAppService cartAppService;
+    private readonly IProductoAppService productoAppService;
     private readonly ILogger<CartAppService> logger;
 
-    public CartAppService(ICartRepository cartRepository, ICartAppService cartAppService,
+    public CartAppService(ICartRepository cartRepository, IProductoAppService productoAppService,
                             ILogger<CartAppService> logger)
     {
         this.cartRepository = cartRepository;
-        this.cartAppService = cartAppService;
+        this.productoAppService = productoAppService;
         this.logger = logger;
     }
 
@@ -26,9 +27,39 @@ public class CartAppService : ICartAppService
         throw new NotImplementedException();
     }
 
-    public Task<CartDto> CreateAsync(CartCreateDto cartDto)
+    public async Task<CartDto> CreateAsync(CartCreateDto cartDto)
     {
-        throw new NotImplementedException();
+        logger.LogInformation("Crear Cart");
+
+        var cart = new Cart(Guid.NewGuid());
+        cart.ClienteId  = cartDto.ClienteId;
+
+        var observaciones = string.Empty;
+        foreach (var item in cartDto.Items)
+        {
+            var productoDto = await productoAppService.GetByIdAsync(item.ProductId);
+            if (productoDto != null)
+            {
+                var cartItem = new CartItems(Guid.NewGuid());
+                cartItem.Cantidad = item.Cantidad;
+                cartItem.Precio = productoDto.Precio;
+                cartItem.ProductId = productoDto.Id;
+                
+                cart.AgregarItem(cartItem);
+            }
+            else
+            {
+                observaciones+=$"El producto {item.ProductId}, no existe!!";
+            }
+        }
+
+        cart.SubTotal = cart.Items.Sum(it => it.Cantidad * it.Precio);
+        cart.Observaciones = observaciones;
+
+        cart = await cartRepository.AddAsync(cart);
+        await cartRepository.UnitOfWork.SaveChangesAsync();
+        
+        return await GetByIdAsync(cart.Id);
     }
 
     public ListaPaginada<CartDto> GetAll(int limit = 10, int offset = 0)
@@ -52,7 +83,7 @@ public class CartAppService : ICartAppService
                                                                                 {
                                                                                     Id = item.Id,
                                                                                     ProductId = item.ProductId,
-                                                                                    Producto = item.Producto.Nombre,
+                                                                                    Product = item.Product.Nombre,
                                                                                     CartId = item.CartId,
                                                                                     Cantidad = item.Cantidad,
                                                                                     Precio = item.Precio

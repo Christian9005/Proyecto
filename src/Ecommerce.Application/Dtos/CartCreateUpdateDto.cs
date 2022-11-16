@@ -8,8 +8,6 @@ public class CartCreateDto
     public Guid ClienteId {get; set;}
     public virtual ICollection<CartItemsCreateUpdateDto> Items {get; set;}
     
-    [Required]
-    public decimal SubTotal {get; set;}
     public string? Observaciones {get; set;}
 }
 

@@ -54,12 +54,31 @@ namespace Ecommerce.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Carts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ClienteId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SubTotal = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Observaciones = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Carts_Clientes_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "Clientes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Ordenes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ClienteId1 = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ClienteId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
                     FechaAnulacion = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Total = table.Column<decimal>(type: "TEXT", nullable: false),
@@ -70,10 +89,11 @@ namespace Ecommerce.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Ordenes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ordenes_Clientes_ClienteId1",
-                        column: x => x.ClienteId1,
+                        name: "FK_Ordenes_Clientes_ClienteId",
+                        column: x => x.ClienteId,
                         principalTable: "Clientes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,18 +106,18 @@ namespace Ecommerce.Infrastructure.Migrations
                     Precio = table.Column<double>(type: "REAL", nullable: false),
                     Observaciones = table.Column<string>(type: "TEXT", nullable: true),
                     Caducidad = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    MarcaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MarcaId1 = table.Column<string>(type: "TEXT", nullable: true),
+                    MarcaId = table.Column<string>(type: "TEXT", nullable: false),
                     TipoProductoId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Productos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Productos_Marcas_MarcaId1",
-                        column: x => x.MarcaId1,
+                        name: "FK_Productos_Marcas_MarcaId",
+                        column: x => x.MarcaId,
                         principalTable: "Marcas",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Productos_TipoProductos_TipoProductoId",
                         column: x => x.TipoProductoId,
@@ -107,14 +127,39 @@ namespace Ecommerce.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CartItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CartId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Cantidad = table.Column<long>(type: "INTEGER", nullable: false),
+                    Precio = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Productos_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Productos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrdenItem",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProducId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: true),
-                    OrdenId = table.Column<int>(type: "INTEGER", nullable: false),
-                    OrdenId1 = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrdenId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Cantidad = table.Column<long>(type: "INTEGER", nullable: false),
                     Precio = table.Column<double>(type: "REAL", nullable: false),
                     Observaciones = table.Column<string>(type: "TEXT", nullable: true)
@@ -123,26 +168,63 @@ namespace Ecommerce.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_OrdenItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrdenItem_Ordenes_OrdenId1",
-                        column: x => x.OrdenId1,
+                        name: "FK_OrdenItem_Ordenes_OrdenId",
+                        column: x => x.OrdenId,
                         principalTable: "Ordenes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrdenItem_Productos_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Productos",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Stocks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    StockProducto = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Stocks_Productos_ProductoId",
+                        column: x => x.ProductoId,
+                        principalTable: "Productos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ordenes_ClienteId1",
-                table: "Ordenes",
-                column: "ClienteId1");
+                name: "IX_CartItems_CartId",
+                table: "CartItems",
+                column: "CartId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrdenItem_OrdenId1",
+                name: "IX_CartItems_ProductId",
+                table: "CartItems",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_ClienteId",
+                table: "Carts",
+                column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ordenes_ClienteId",
+                table: "Ordenes",
+                column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrdenItem_OrdenId",
                 table: "OrdenItem",
-                column: "OrdenId1");
+                column: "OrdenId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdenItem_ProductId",
@@ -150,21 +232,35 @@ namespace Ecommerce.Infrastructure.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Productos_MarcaId1",
+                name: "IX_Productos_MarcaId",
                 table: "Productos",
-                column: "MarcaId1");
+                column: "MarcaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Productos_TipoProductoId",
                 table: "Productos",
                 column: "TipoProductoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stocks_ProductoId",
+                table: "Stocks",
+                column: "ProductoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CartItems");
+
+            migrationBuilder.DropTable(
                 name: "OrdenItem");
+
+            migrationBuilder.DropTable(
+                name: "Stocks");
+
+            migrationBuilder.DropTable(
+                name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "Ordenes");

@@ -10,7 +10,7 @@ public class CartItemsDto
 
     [Required]
     public int ProductId {get; set;}
-    public virtual string? Producto{get; set;}
+    public virtual string? Product{get; set;}
 
     [Required]
     public Guid CartId {get; set;}
