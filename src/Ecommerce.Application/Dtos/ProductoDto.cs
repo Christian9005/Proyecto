@@ -19,7 +19,7 @@ public class ProductoDto
     public DateTime Caducidad {get; set;}
 
     [Required]
-    public int MarcaId {get; set;}
+    public string MarcaId {get; set;}
 
     public string? Marca {get; set;}
 

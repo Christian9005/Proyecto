@@ -1,22 +1,23 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Domain;
 
 public class Orden
 {
+    public Orden(Guid id)
+    {
+        this.Id = id;
+    }
+
     [Required]
     public Guid Id {get; set;}
 
     [Required]
-    public int ClienteId {get; set;}
+    public Guid ClienteId {get; set;}
 
-    public virtual Cliente? Cliente {get; set;}
+    public virtual Cliente Cliente {get; set;}
 
-    public virtual ICollection<OrdenItem>? Items {get; set;}
+    public virtual ICollection<OrdenItem> Items {get; set;} = new List<OrdenItem>();
 
     [Required]
     public DateTime Fecha {get; set;}
@@ -31,7 +32,7 @@ public class Orden
     [Required]
     public OrdenEstado Estado {get; set;}
 
-    public void Agregaritem(OrdenItem item)
+    public void AgregarItem(OrdenItem item)
     {
         item.Orden = this;
         Items.Add(item);

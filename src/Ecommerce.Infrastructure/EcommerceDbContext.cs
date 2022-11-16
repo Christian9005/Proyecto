@@ -1,4 +1,5 @@
 using Ecommerce.Domain;
+using Ecommerce.Domain.Entidades;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Infrastructure;
@@ -10,6 +11,8 @@ public class EcommerceDbContext : DbContext, IUnitOfWork
     public DbSet<Producto> Productos {get; set;}
     public DbSet<Cliente> Clientes {get; set;}
     public DbSet<Orden> Ordenes {get; set;}
+    public DbSet<Cart> Carts {get; set;}
+    public DbSet<Stock> Stocks {get; set;}
     
     public string DbPath {get; set;}
 
@@ -24,8 +27,11 @@ public class EcommerceDbContext : DbContext, IUnitOfWork
             .HasConversion<double>()
             ;
 
-        //TODO: Conversion. Ejemplos. Estado. ??
         modelBuilder.Entity<OrdenItem>()
+            .Property(e => e.Precio)
+            .HasConversion<double>();
+
+        modelBuilder.Entity<CartItems>()
             .Property(e => e.Precio)
             .HasConversion<double>();
 

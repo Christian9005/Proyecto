@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Domain;
 
@@ -22,7 +19,7 @@ public class Producto
     public DateTime Caducidad {get; set;}
 
     [Required]
-    public int MarcaId {get; set;}
+    public string MarcaId {get; set;}
 
     public virtual Marca? Marca {get; set;}
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Infrastructure;
 
-public class TipoProductoRepository : EfRepository<TipoProducto>, ITipoProductoRepository
+public class TipoProductoRepository : EfRepository<TipoProducto, int>, ITipoProductoRepository
 {
     public TipoProductoRepository(EcommerceDbContext context) : base(context)
     {

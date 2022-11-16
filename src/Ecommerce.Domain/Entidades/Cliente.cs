@@ -8,8 +8,13 @@ namespace Ecommerce.Domain;
 
 public class Cliente
 {
+    public Cliente(Guid id)
+    {
+        this.Id = id;
+    }
+
     [Required]
-    public int Id {get; set;}
+    public Guid Id {get; set;}
 
     [Required]
     [StringLength(Constantes.MAX_LEN)]

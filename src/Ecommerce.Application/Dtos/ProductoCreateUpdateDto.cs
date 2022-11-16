@@ -14,7 +14,7 @@ public class ProductoCreateUpdateDto
     public DateTime Caducidad {get; set;}
 
     [Required]
-    public int MarcaId {get; set;}
+    public string MarcaId {get; set;}
 
     [Required]
     public int TipoProductoId {get; set;}

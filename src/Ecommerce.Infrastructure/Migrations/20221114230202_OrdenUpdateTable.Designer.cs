@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    [Migration("20221110013753_MigracionInicial")]
-    partial class MigracionInicial
+    [Migration("20221114230202_OrdenUpdateTable")]
+    partial class OrdenUpdateTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,9 +22,9 @@ namespace Ecommerce.Infrastructure.Migrations
 
             modelBuilder.Entity("Ecommerce.Domain.Cliente", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Cedula")
                         .IsRequired()
@@ -81,8 +81,8 @@ namespace Ecommerce.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ClienteId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Estado")
                         .HasColumnType("INTEGER");
@@ -121,16 +121,13 @@ namespace Ecommerce.Infrastructure.Migrations
                     b.Property<int>("OrdenId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("OrdenId1")
+                    b.Property<Guid>("OrdenId1")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Precio")
                         .HasColumnType("REAL");
 
-                    b.Property<int>("ProducId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -151,10 +148,8 @@ namespace Ecommerce.Infrastructure.Migrations
                     b.Property<DateTime>("Caducidad")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MarcaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("MarcaId1")
+                    b.Property<string>("MarcaId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
@@ -173,7 +168,7 @@ namespace Ecommerce.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MarcaId1");
+                    b.HasIndex("MarcaId");
 
                     b.HasIndex("TipoProductoId");
 
@@ -211,11 +206,15 @@ namespace Ecommerce.Infrastructure.Migrations
                 {
                     b.HasOne("Ecommerce.Domain.Orden", "Orden")
                         .WithMany("Items")
-                        .HasForeignKey("OrdenId1");
+                        .HasForeignKey("OrdenId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Ecommerce.Domain.Producto", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Orden");
 
@@ -226,7 +225,9 @@ namespace Ecommerce.Infrastructure.Migrations
                 {
                     b.HasOne("Ecommerce.Domain.Marca", "Marca")
                         .WithMany()
-                        .HasForeignKey("MarcaId1");
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Ecommerce.Domain.TipoProducto", "TipoProducto")
                         .WithMany()

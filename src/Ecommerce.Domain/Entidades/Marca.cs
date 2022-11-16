@@ -8,6 +8,7 @@ namespace Ecommerce.Domain;
 
 public class Marca
 {
+    
     [Required]
     [StringLength(Constantes.MAX_LEN_ID)]
     public string Id {get; set;}

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ecommerce.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class MigracionInicial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,7 @@ namespace Ecommerce.Infrastructure.Migrations
                 name: "Clientes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     NombreCompleto = table.Column<string>(type: "TEXT", maxLength: 80, nullable: false),
                     Cedula = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
                     Correo = table.Column<string>(type: "TEXT", maxLength: 120, nullable: false),
@@ -60,6 +59,7 @@ namespace Ecommerce.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ClienteId1 = table.Column<Guid>(type: "TEXT", nullable: true),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
                     FechaAnulacion = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Total = table.Column<decimal>(type: "TEXT", nullable: false),
@@ -70,11 +70,10 @@ namespace Ecommerce.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Ordenes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ordenes_Clientes_ClienteId",
-                        column: x => x.ClienteId,
+                        name: "FK_Ordenes_Clientes_ClienteId1",
+                        column: x => x.ClienteId1,
                         principalTable: "Clientes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -136,9 +135,9 @@ namespace Ecommerce.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ordenes_ClienteId",
+                name: "IX_Ordenes_ClienteId1",
                 table: "Ordenes",
-                column: "ClienteId");
+                column: "ClienteId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdenItem_OrdenId1",

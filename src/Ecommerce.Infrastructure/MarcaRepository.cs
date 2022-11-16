@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Infrastructure;
 
-public class MarcaRepository : EfRepository<Marca>, IMarcaRepository
+public class MarcaRepository : EfRepository<Marca, string>, IMarcaRepository
 {
     public MarcaRepository(EcommerceDbContext context) : base(context)
     {
