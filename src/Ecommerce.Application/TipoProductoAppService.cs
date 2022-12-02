@@ -70,6 +70,7 @@ public class TipoProductoAppService : ITipoProductoAppService
         }
 
         repository.Delete(tipoProducto);
+        await repository.UnitOfWork.SaveChangesAsync();
 
         return true;
     }

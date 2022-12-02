@@ -53,9 +53,11 @@ public class ClienteAppService : IClienteAppService
         return true;
     }
 
-    public ICollection<ClienteDto> GetAll(int limit = 10, int offset = 0)
+    public ListaPaginada<ClienteDto> GetAll(int limit = 10, int offset = 0)
     {
         var clientelist = clienteRepository.GetAll();
+
+        var total = clientelist.Count();
 
         var clientelistDto = from c in clientelist
                                 select new ClienteDto()
@@ -69,7 +71,12 @@ public class ClienteAppService : IClienteAppService
                                     NumeroCelular = c.NumeroCelular
                                 };
         
-        return clientelistDto.ToList();
+        //return clientelistDto.ToList();
+        var resultado = new ListaPaginada<ClienteDto>();
+        resultado.Total = total;
+        resultado.Lista = clientelistDto.ToList();
+        
+        return resultado;
     }
 
     public async Task UpdateAsync(Guid clienteId, ClienteCreateUpdateDto clienteDto)

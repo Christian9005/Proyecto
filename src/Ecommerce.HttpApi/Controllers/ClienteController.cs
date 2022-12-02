@@ -1,3 +1,4 @@
+using Ecommerce.Application;
 using Ecommerce.Application.Dtos;
 using Ecommerce.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ public class ClienteController : ControllerBase
     }
 
     [HttpGet]
-    public ICollection<ClienteDto> GetAll(int limit = 10, int offset = 0)
+    public ListaPaginada<ClienteDto> GetAll(int limit = 10, int offset = 0)
     {
         return clienteAppService.GetAll(limit, offset);
     }
